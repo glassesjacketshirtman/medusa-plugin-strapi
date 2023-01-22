@@ -25,8 +25,8 @@
   </a>
 </p>
 
-
 ## Setting up your store
+
 - Initialize a `medusa` project by using a starter
   ```
   yarn create medusa-app
@@ -48,17 +48,18 @@
   None
   ```
 - Make sure `redis` is installed and running
-  ``` 
+  ```
   $ redis-cli
   127.0.0.1:6379> ping
   PONG
   ```
 - Go to backend directory.
-  ``` 
-  cd <Your project name>/backend 
   ```
-- Make sure your packages version in `package.json` match this - 
-  ``` 
+  cd <Your project name>/backend
+  ```
+- Make sure your packages version in `package.json` match this -
+
+  ```
     "@medusajs/medusa": "^1.1.49",
     "@medusajs/medusa-cli": "^1.1.22",
     "medusa-fulfillment-manual": "^1.1.26",
@@ -70,7 +71,7 @@
   ```
 
 - Edit `medusa-config.js`. Navigate to the end of file and make sure this line is not commented out -
-  ``` 
+  ```
   redis_url: REDIS_URL,
   ```
 - In the same file, add this object to plugins array -
@@ -78,15 +79,14 @@
   {
     resolve: `medusa-plugin-strapi`,
     options: {
-    strapi_medusa_user: 'medusa_user',
-    strapi_medusa_password: 'medusaPassword1',
-    strapi_url: '127.0.0.1',
-    strapi_port: '1337'
+    strapi_token: 'token', // see https://docs.strapi.io/developer-docs/latest/setup-deployment-guides/configurations/optional/api-tokens.html for more information
+    strapi_url: 'http://localhost:1337'
     }
   }
   ```
 - Create and navigate to `plugins` directory and pull `medusa-plugin-strapi`
-  ``` 
+
+  ```
   cd plugins
   git clone https://github.com/Deathwish98/medusa-plugin-strapi.git
   ```
@@ -98,13 +98,13 @@
   npm run build
   ```
 - Start medusa server from `backend` directory
-  ``` 
+  ```
   cd ../../
   npm run seed
   npm run start
   ```
 
-Your local Medusa server should now be running on port **9000**. 
+Your local Medusa server should now be running on port **9000**.
 
 ## Setting up strapi
 
@@ -112,28 +112,33 @@ This plugin assumes that you are familiar with strapi. If you have not used it b
 
 https://strapi.io/documentation/developer-docs/latest/getting-started/quick-start.html
 
-- Create a new strapi project using our template. 
+- Create a new strapi project using our template.
+
   ```
   npx create-strapi-app@3.6.8 strapi-medusa --template https://github.com/Deathwish98/strapi-medusa-template.git
-  
+
   OR
-  
+
   yarn create strapi-app strapi-medusa --template https://github.com/Deathwish98/strapi-medusa-template.git
   ```
 
-- Start strapi server. 
-  ``` 
+- Start strapi server.
+
+  ```
   npm run develop <---- For development purposes
-  
-  OR 
-  
+
+  OR
+
   npm run start
   ```
+
   NOTE: If you are using `SQLite` there is a known `knex.js` bug -
-  ``` 
+
+  ```
   error KnexTimeoutError: Knex: Timeout acquiring a connection. The pool is probably full. Are you missing a .transacting(trx) call?
   ```
-  It  appears after running `npm run develop` for the first time . Just run the command again and it should disappear. 
+
+  It appears after running `npm run develop` for the first time . Just run the command again and it should disappear.
 
 Visit [docs.medusa-commerce.com](https://docs.medusa-comerce.com) for further guides.
 

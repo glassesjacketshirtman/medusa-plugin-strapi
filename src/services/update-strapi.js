@@ -28,16 +28,11 @@ class UpdateStrapiService extends BaseService {
 
     this.protocol = this.options_.strapi_protocol
 
-    this.strapi_URL_STRING=`${this.protocol??"https"}://${this.options_.strapi_url??"localhost"}:${this.options_.strapi_port??1337}`
+    this.strapi_URL_STRING = this.options_.strapi_url
 
+    this.strapiAuthToken = this.options_.strapi_token
 
-    this.strapiAuthToken = ""
-
-    this.checkStrapiHealth().then((res) => {
-      if (res) {
-        this.loginToStrapi()
-      }
-    })
+    this.checkStrapiHealth()
 
     this.redis_ = redisClient
   }
@@ -463,7 +458,7 @@ class UpdateStrapiService extends BaseService {
 
   async getType(type) {
     if (!this.strapiAuthToken) {
-      await this.loginToStrapi()
+      throw new Error("Error while getting auth token - token is empty")
     }
     const config = {
       url: `${this.strapi_URL_STRING}/api/${type}`,
@@ -481,7 +476,7 @@ class UpdateStrapiService extends BaseService {
       method: "head",
       url: `${this.strapi_URL_STRING}/_health`,
     }
-    console.log("Checking strapi Health")
+    console.log("Checking strapi Health", config)
     return axios(config)
       .then((res) => {
         if (res.status === 204) {
@@ -499,34 +494,9 @@ class UpdateStrapiService extends BaseService {
       })
   }
 
-  async loginToStrapi() {
-    const config = {
-      method: "post",
-      url: `${this.strapi_URL_STRING}/api/auth/local`,
-      data: {
-        identifier: this.options_.strapi_medusa_user,
-        password: this.options_.strapi_medusa_password,
-      },
-    }
-    return axios(config)
-      .then((res) => {
-        if (res.data.jwt) {
-          this.strapiAuthToken = res.data.jwt
-          console.log("\n Successfully logged in to Strapi \n")
-          return true
-        }
-        return false
-      })
-      .catch((error) => {
-        if (error) {
-          throw new Error("\nError while trying to login to strapi\n"+error)
-        }
-      })
-  }
-
   async createEntryInStrapi(type, id, data) {
     if (!this.strapiAuthToken) {
-      await this.loginToStrapi()
+      throw new Error("Error while getting auth token - token is empty")
     }
     const config = {
       method: "post",
@@ -555,7 +525,7 @@ class UpdateStrapiService extends BaseService {
 
   async updateEntryInStrapi(type, id, data) {
     if (!this.strapiAuthToken) {
-      await this.loginToStrapi()
+      throw new Error("Error while getting auth token - token is empty")
     }
     const config = {
       method: "put",
@@ -582,7 +552,7 @@ class UpdateStrapiService extends BaseService {
 
   async deleteEntryInStrapi(type, id) {
     if (!this.strapiAuthToken) {
-      await this.loginToStrapi()
+      throw new Error("Error while getting auth token - token is empty")
     }
     const config = {
       method: "delete",
@@ -607,7 +577,7 @@ class UpdateStrapiService extends BaseService {
 
   async doesEntryExistInStrapi(type, id) {
     if (!this.strapiAuthToken) {
-      await this.loginToStrapi()
+      throw new Error("Error while getting auth token - token is empty")
     }
     const config = {
       method: "get",
