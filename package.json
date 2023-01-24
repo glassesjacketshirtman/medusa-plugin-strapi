@@ -1,19 +1,15 @@
 {
-  "name": "medusa-plugin-strapi",
-  "version": "1.0.7-dev",
+  "name": "@erotiqa/medusa-plugin-strapi",
+  "version": "1.0.1",
   "description": "Strapi plugin for Medusa Commerce",
   "main": "index.js",
+  "repository": "https://github.com/glassesjacketshirtman/medusa-plugin-strapi",
   "keywords": [
     "medusa",
     "medusa-strapi",
     "medusa-plugin"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/medusajs/medusa",
-    "directory": "packages/medusa-plugin-strapi"
-  },
-  "author": "Pawan Sharma",
+  "author": "Robbin",
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.7.5",

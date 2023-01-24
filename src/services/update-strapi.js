@@ -16,6 +16,8 @@ class UpdateStrapiService extends BaseService {
   ) {
     super()
 
+    console.log("========= STRAPI REGISTERING ===========")
+
     this.productService_ = productService
 
     this.productVariantService_ = productVariantService
@@ -96,7 +98,7 @@ class UpdateStrapiService extends BaseService {
     const hasType = await this.getType("products")
       .then(() => true)
       .catch((err) => {
-        // console.log(err)
+        console.log(err)
         return false
       })
     if (!hasType) {
@@ -498,6 +500,7 @@ class UpdateStrapiService extends BaseService {
     if (!this.strapiAuthToken) {
       throw new Error("Error while getting auth token - token is empty")
     }
+
     const config = {
       method: "post",
       url: `${this.strapi_URL_STRING}/api/${type}`,
